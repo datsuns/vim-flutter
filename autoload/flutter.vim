@@ -106,6 +106,25 @@ function! flutter#_on_output_nvim(job_id, data, event) abort dict
 endfunction
 endif
 
+function! flutter#open_log_window() abort
+  if bufnr('__Flutter_Output__') != -1
+    return
+  endif
+
+  if g:flutter_show_log_always_tab
+    tabnew __Flutter_Output__
+    if g:flutter_default_output_tab_num != -1
+      execute(g:flutter_default_output_tab_num . "tabmove")
+    endif
+  else
+    split __Flutter_Output__
+  endif
+  normal! ggdG
+  setlocal buftype=nofile
+  setlocal bufhidden=hide
+  setlocal noswapfile
+endfunction
+
 function! flutter#run(...) abort
   if exists('g:flutter_job')
     echoerr 'Another Flutter process is running.'
@@ -113,18 +132,7 @@ function! flutter#run(...) abort
   endif
 
   if g:flutter_show_log_on_run
-    if g:flutter_show_log_always_tab
-      tabnew __Flutter_Output__
-      if g:flutter_default_output_tab_num != -1
-        execute(g:flutter_default_output_tab_num . "tabmove")
-      endif
-    else
-      split __Flutter_Output__
-    endif
-    normal! ggdG
-    setlocal buftype=nofile
-    setlocal bufhidden=hide
-    setlocal noswapfile
+    call flutter#open_log_window()
   endif
 
   let cmd = [&shell, &shellcmdflag, g:flutter_command, 'run']
