@@ -23,6 +23,10 @@ elseif &hidden == 0 && g:flutter_show_log_on_run == 0
   let g:flutter_show_log_on_run = 1
 endif
 
+if !exists('g:flutter_show_log_always_tab')
+  let g:flutter_show_log_always_tab=0
+endif
+
 command! FlutterDevices call flutter#devices()
 command! FlutterEmulators call flutter#emulators()
 command! -nargs=1 FlutterEmulatorsLaunch call flutter#emulators_launch(<f-args>)
