@@ -104,7 +104,11 @@ function! flutter#run(...) abort
   endif
 
   if g:flutter_show_log_on_run
-    split __Flutter_Output__
+    if g:flutter_show_log_always_tab
+      tabnew __Flutter_Output__
+    else
+      split __Flutter_Output__
+    endif
     normal! ggdG
     setlocal buftype=nofile
     setlocal bufhidden=hide
