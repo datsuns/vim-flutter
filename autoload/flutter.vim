@@ -19,8 +19,17 @@ function! flutter#emulators() abort
 endfunction
  
 function! flutter#emulators_launch(emulator) abort
-  let cmd = g:flutter_command . " emulators --launch ". a:emulator
-  execute "!". cmd
+  if has('nvim')
+    let cmd = g:flutter_command . " emulators --launch ". a:emulator
+    execute "!". cmd
+  elseif v:version >= 800
+    let cmd = [&shell, &shellcmdflag, g:flutter_command, 'emulators', '--launch', a:emulator]
+    call job_start(cmd, {
+          \ 'stoponexit': ''
+          \ })
+  else
+    echoerr 'This vim does not support async jobs needed for running Flutter.'
+  endif
 endfunction
 
 function! flutter#send(msg) abort
