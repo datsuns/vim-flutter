@@ -125,6 +125,21 @@ function! flutter#open_log_window() abort
   setlocal noswapfile
 endfunction
 
+function! flutter#fix_run_option(arg) abort
+  let fixed_opt = []
+  if !empty(a:arg)
+    let fixed_opt = a:arg
+    if g:flutter_use_last_run_option
+      let g:flutter_last_run_option = a:arg
+    endif
+  else
+    if g:flutter_use_last_run_option && exists('g:flutter_last_run_option')
+      let fixed_opt += g:flutter_last_run_option
+    endif
+  endif
+  return fixed_opt
+endfunction
+
 function! flutter#run(...) abort
   if exists('g:flutter_job')
     echoerr 'Another Flutter process is running.'
@@ -136,16 +151,7 @@ function! flutter#run(...) abort
   endif
 
   let cmd = [&shell, &shellcmdflag, g:flutter_command, 'run']
-  if !empty(a:000)
-    let cmd += a:000
-    if g:flutter_use_last_run_option
-      let g:flutter_last_run_option = a:000
-    endif
-  else
-    if g:flutter_use_last_run_option && exists('g:flutter_last_run_option')
-      let cmd += g:flutter_last_run_option
-    endif
-  endif
+  let cmd = extend(cmd, flutter#fix_run_option(a:000))
 
   if has('nvim')
     let g:flutter_job = jobstart(cmd, {
