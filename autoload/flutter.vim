@@ -106,6 +106,9 @@ function! flutter#run(...) abort
   if g:flutter_show_log_on_run
     if g:flutter_show_log_always_tab
       tabnew __Flutter_Output__
+      if g:flutter_default_output_tab_num != -1
+        execute(g:flutter_default_output_tab_num . "tabmove")
+      endif
     else
       split __Flutter_Output__
     endif

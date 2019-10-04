@@ -31,6 +31,10 @@ if !exists('g:flutter_show_log_always_tab')
   let g:flutter_show_log_always_tab=0
 endif
 
+if !exists('g:flutter_default_output_tab_num')
+  let g:flutter_default_output_tab_num=-1
+endif
+
 command! FlutterDevices call flutter#devices()
 command! FlutterEmulators call flutter#emulators()
 command! -nargs=1 FlutterEmulatorsLaunch call flutter#emulators_launch(<f-args>)
