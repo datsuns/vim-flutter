@@ -107,10 +107,6 @@ endfunction
 endif
 
 function! flutter#open_log_window() abort
-  if bufnr('__Flutter_Output__') != -1
-    return
-  endif
-
   if g:flutter_show_log_always_tab
     tabnew __Flutter_Output__
     if g:flutter_default_output_tab_num != -1
