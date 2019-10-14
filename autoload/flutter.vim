@@ -146,7 +146,7 @@ function! flutter#run(...) abort
     call flutter#open_log_window()
   endif
 
-  let cmd = [&shell, &shellcmdflag, g:flutter_command, 'run']
+  let cmd = [g:flutter_command, 'run']
   let cmd = extend(cmd, flutter#fix_run_option(a:000))
 
   if has('nvim')
