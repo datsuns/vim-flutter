@@ -146,8 +146,17 @@ function! flutter#run(...) abort
     call flutter#open_log_window()
   endif
 
-  let cmd = [g:flutter_command, 'run']
-  let cmd = extend(cmd, flutter#fix_run_option(a:000))
+  let cmd = g:flutter_command.' run'
+  if !empty(a:000)
+    let cmd = cmd." ".join(a:000)
+    if g:flutter_use_last_run_option
+      let g:flutter_last_run_option = a:000
+    endif
+  else
+    if g:flutter_use_last_run_option && exists('g:flutter_last_run_option')
+      let cmd += g:flutter_last_run_option
+    endif
+  endif
 
   if has('nvim')
     let g:flutter_job = jobstart(cmd, {
